@@ -1,0 +1,15 @@
+[debug] [2026-01-08T08:58:22.794Z] ----------------------------------------------------------------------
+[debug] [2026-01-08T08:58:22.797Z] Command:       /usr/bin/node /usr/bin/firebase login
+[debug] [2026-01-08T08:58:22.797Z] CLI Version:   15.2.0
+[debug] [2026-01-08T08:58:22.798Z] Platform:      linux
+[debug] [2026-01-08T08:58:22.798Z] Node Version:  v20.19.6
+[debug] [2026-01-08T08:58:22.798Z] Time:          Thu Jan 08 2026 14:28:22 GMT+0530 (India Standard Time)
+[debug] [2026-01-08T08:58:22.798Z] ----------------------------------------------------------------------
+[debug] 
+[info] Already logged in as 4mk23is023@mitkundapura.com
+[debug] [2026-01-08T08:58:30.266Z] Error: Timed out.
+    at Timeout.<anonymous> (/usr/lib/node_modules/firebase-tools/lib/utils.js:308:49)
+    at listOnTimeout (node:internal/timers:581:17)
+    at process.processTimers (node:internal/timers:519:7)
+[error] 
+[error] Error: An unexpected error has occurred.

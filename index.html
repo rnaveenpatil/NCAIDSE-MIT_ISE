@@ -6,6 +6,12 @@
     <title>NCAIDSE 2026 | National Conference on Advances in Information and Data Science Engineering</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK v9 (Modular) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -964,6 +970,95 @@
             transform: translateX(0);
         }
 
+        /* Firebase Admin Styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1003;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .error-message {
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .admin-table th, .admin-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .admin-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .admin-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .admin-table tr:hover {
+            background-color: #ddd;
+        }
+        
+        .stat-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: var(--primary-color);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .hero h1, .tourist-hero h1 {
@@ -1032,6 +1127,11 @@
                 height: 60px;
                 font-size: 1.5rem;
             }
+            
+            .admin-table {
+                display: block;
+                overflow-x: auto;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1062,6 +1162,11 @@
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+    
     <!-- Header -->
     <header>
         <div class="container header-container">
@@ -1133,7 +1238,7 @@
                     
                     <div>
                         <button class="cta-button" id="registerHomeBtn">Register Now</button>
-                        <button class="cta-button secondary-button" data-page="tourist">Explore Tourist Places</button>
+                        <button class="cta-button secondary-button" id="exploreTouristBtn">Explore Tourist Places</button>
                     </div>
                 </div>
             </div>
@@ -1410,6 +1515,8 @@
                 <div class="container">
                     <div class="section-title">
                         <h2>Registration Form</h2>
+                        <p id="registrationStatus" class="success-message"></p>
+                        <p id="registrationError" class="error-message"></p>
                     </div>
                     
                     <div class="registration-form-container">
@@ -1434,7 +1541,8 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="phone">Phone</label>
-                                    <input type="tel" id="phone" name="phone" required>
+                                    <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}">
+                                    <small>Format: 10-digit number</small>
                                 </div>
                                 
                                 <div class="form-group">
@@ -1446,7 +1554,8 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="upi">UPI Reference No.</label>
-                                    <input type="text" id="upi" name="upi">
+                                    <input type="text" id="upi" name="upi" pattern="[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}">
+                                    <small>Format: example@upi</small>
                                 </div>
                                 
                                 <div class="form-group">
@@ -1468,6 +1577,7 @@
                             <div class="form-group">
                                 <label for="authors">Author(s)</label>
                                 <textarea id="authors" name="authors" rows="3" required></textarea>
+                                <small>Separate multiple authors with commas</small>
                             </div>
                             
                             <div class="form-group">
@@ -1481,8 +1591,89 @@
                                 </select>
                             </div>
                             
-                            <button type="submit" class="cta-button" style="width: 100%;">Submit Registration</button>
+                            <div class="form-group">
+                                <label for="paymentProof">Payment Proof Upload (Optional)</label>
+                                <input type="file" id="paymentProof" name="paymentProof" accept=".pdf,.jpg,.jpeg,.png">
+                                <small>Accepted formats: PDF, JPG, PNG (Max 5MB)</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="terms" name="terms" required>
+                                    I agree to the <a href="#" id="termsLink">terms and conditions</a>
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="cta-button" style="width: 100%;" id="submitBtn">
+                                <span id="submitText">Submit Registration</span>
+                                <div id="submitSpinner" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i> Processing...
+                                </div>
+                            </button>
                         </form>
+                    </div>
+                    
+                    <!-- Admin Login Button -->
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button id="adminLoginBtn" class="secondary-button">Admin Login</button>
+                        <button id="viewRegistrationsBtn" class="cta-button" style="display: none; margin-top: 10px;">View Registrations</button>
+                        <button id="logoutBtn" class="secondary-button" style="display: none; margin-top: 10px;">Logout</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Admin Panel -->
+            <div id="adminPanel" style="display: none; padding: 80px 0; background-color: #f0f4f8;">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Admin Panel - Registered Participants</h2>
+                        <p>Total Registrations: <span id="totalRegistrations">0</span></p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <button id="exportCSVBtn" class="action-btn">Export to CSV</button>
+                        <button id="exportPDFBtn" class="action-btn" style="margin-left: 10px;">Export to PDF</button>
+                        <button id="refreshBtn" class="action-btn" style="margin-left: 10px;">Refresh Data</button>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Organization</th>
+                                    <th>Category</th>
+                                    <th>Paper Title</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registrationsTableBody">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Statistics Section -->
+                    <div style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div class="stat-card">
+                            <h3>Industry</h3>
+                            <p class="stat-number" id="industryCount">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Academic</h3>
+                            <p class="stat-number" id="academicCount">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Research Scholar</h3>
+                            <p class="stat-number" id="researchCount">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Student</h3>
+                            <p class="stat-number" id="studentCount">0</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1632,7 +1823,32 @@
     </footer>
 
     <script>
-        // Tourist Data from PDF
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCyPFhXiHD8rdaISngtfppUfObc11XUyFY",
+            authDomain: "mit-ise.firebaseapp.com",
+            projectId: "mit-ise",
+            storageBucket: "mit-ise.firebasestorage.app",
+            messagingSenderId: "1003313648930",
+            appId: "1:1003313648930:web:840975ff875ff2268a817b",
+            measurementId: "G-3H4MZ7MM9Z"
+        };
+        
+        // Initialize Firebase
+        try {
+            firebase.initializeApp(firebaseConfig);
+        } catch (error) {
+            console.log("Firebase already initialized");
+        }
+        
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        // Admin credentials (for demo purposes only)
+        const ADMIN_EMAIL = "admin@ncaidse.com";
+        const ADMIN_PASSWORD = "admin123";
+        
+        // Tourist Data
         const touristData = [
             {
                 id: 1,
@@ -1996,6 +2212,7 @@
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const navMenu = document.getElementById('navMenu');
             const registerHomeBtn = document.getElementById('registerHomeBtn');
+            const exploreTouristBtn = document.getElementById('exploreTouristBtn');
             const topicsGrid = document.getElementById('topicsGrid');
             const touristContainer = document.getElementById('touristContainer');
             const categoryBtns = document.querySelectorAll('.category-btn');
@@ -2009,6 +2226,19 @@
             const countdownHours = document.getElementById('hours');
             const countdownMinutes = document.getElementById('minutes');
             const countdownSeconds = document.getElementById('seconds');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const registrationStatus = document.getElementById('registrationStatus');
+            const registrationError = document.getElementById('registrationError');
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const submitSpinner = document.getElementById('submitSpinner');
+            const adminLoginBtn = document.getElementById('adminLoginBtn');
+            const viewRegistrationsBtn = document.getElementById('viewRegistrationsBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const adminPanel = document.getElementById('adminPanel');
+            const exportCSVBtn = document.getElementById('exportCSVBtn');
+            const exportPDFBtn = document.getElementById('exportPDFBtn');
+            const refreshBtn = document.getElementById('refreshBtn');
 
             // Initialize topics
             renderTopics();
@@ -2081,8 +2311,14 @@
                 switchPage('registration');
             });
             
+            // Explore tourist button
+            exploreTouristBtn.addEventListener('click', function() {
+                switchPage('tourist');
+            });
+            
             // Render topics
             function renderTopics() {
+                if (!topicsGrid) return;
                 topicsGrid.innerHTML = '';
                 conferenceTopics.forEach(topic => {
                     const topicItem = document.createElement('div');
@@ -2108,6 +2344,7 @@
             
             // Render tourist cards
             function renderTouristCards(data) {
+                if (!touristContainer) return;
                 touristContainer.innerHTML = '';
                 
                 data.forEach(item => {
@@ -2125,7 +2362,7 @@
                     
                     card.innerHTML = `
                         <div class="tourist-image">
-                            <img src="${item.image}" alt="${item.name}">
+                            <img src="${item.image}" alt="${item.name}" loading="lazy">
                             <div class="tourist-category">${categoryLabel}</div>
                         </div>
                         <div class="tourist-info">
@@ -2266,11 +2503,6 @@
                 const item = touristData.find(t => t.id === id);
                 if (!item) return;
                 
-                // Create Google Maps URL for directions from MITK
-                const baseUrl = 'https://www.google.com/maps/dir/';
-                const mitkCoords = '13.062864,74.686563'; // MITK coordinates
-                let destination = '';
-                
                 // Map place names to coordinates (approximate)
                 const placeCoords = {
                     1: '13.3490,74.6789', // St. Mary's Islands
@@ -2290,7 +2522,8 @@
                     15: '14.2299,74.8122' // Jog Falls
                 };
                 
-                destination = placeCoords[id] || '13.062864,74.686563';
+                const destination = placeCoords[id] || '13.062864,74.686563';
+                const baseUrl = 'https://www.google.com/maps/dir/';
                 
                 // Open Google Maps in new tab
                 window.open(`${baseUrl}Moodlakatte+Institute+of+Technology+Kundapura/${destination}`, '_blank');
@@ -2307,24 +2540,136 @@
                 }
             });
             
-            // Form submission
+            // Function to show/hide loading
+            function showLoading(show) {
+                if (show) {
+                    loadingOverlay.style.display = 'flex';
+                    if (submitText) submitText.style.display = 'none';
+                    if (submitSpinner) submitSpinner.style.display = 'block';
+                    if (submitBtn) submitBtn.disabled = true;
+                } else {
+                    loadingOverlay.style.display = 'none';
+                    if (submitText) submitText.style.display = 'block';
+                    if (submitSpinner) submitSpinner.style.display = 'none';
+                    if (submitBtn) submitBtn.disabled = false;
+                }
+            }
+            
+            // Function to show success/error messages
+            function showMessage(type, message) {
+                if (type === 'success') {
+                    if (registrationStatus) {
+                        registrationStatus.textContent = message;
+                        registrationStatus.style.display = 'block';
+                    }
+                    if (registrationError) {
+                        registrationError.style.display = 'none';
+                    }
+                    
+                    // Hide after 5 seconds
+                    setTimeout(() => {
+                        if (registrationStatus) registrationStatus.style.display = 'none';
+                    }, 5000);
+                } else {
+                    if (registrationError) {
+                        registrationError.textContent = message;
+                        registrationError.style.display = 'block';
+                    }
+                    if (registrationStatus) {
+                        registrationStatus.style.display = 'none';
+                    }
+                    
+                    // Hide after 5 seconds
+                    setTimeout(() => {
+                        if (registrationError) registrationError.style.display = 'none';
+                    }, 5000);
+                }
+            }
+            
+            // Firebase Registration Function
+            async function submitRegistrationToFirebase(formData) {
+                try {
+                    showLoading(true);
+                    
+                    // Generate a unique ID for the registration
+                    const registrationId = 'REG' + Date.now() + Math.random().toString(36).substr(2, 9);
+                    
+                    // Prepare registration data
+                    const registrationData = {
+                        id: registrationId,
+                        name: formData.get('name'),
+                        organization: formData.get('organization'),
+                        address: formData.get('address'),
+                        phone: formData.get('phone'),
+                        email: formData.get('email'),
+                        upi: formData.get('upi') || '',
+                        date: formData.get('date'),
+                        bank: formData.get('bank') || '',
+                        paperTitle: formData.get('paperTitle'),
+                        authors: formData.get('authors'),
+                        category: formData.get('category'),
+                        paymentProof: formData.get('paymentProof') ? 'Uploaded' : 'Not provided',
+                        termsAccepted: true,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: 'pending',
+                        registrationDate: new Date().toISOString()
+                    };
+                    
+                    // Add registration to Firestore
+                    await db.collection('registrations').doc(registrationId).set(registrationData);
+                    
+                    console.log('Registration saved to Firebase:', registrationData);
+                    
+                    return { success: true, id: registrationId, data: registrationData };
+                    
+                } catch (error) {
+                    console.error('Error saving registration to Firebase:', error);
+                    return { success: false, error: error.message };
+                } finally {
+                    showLoading(false);
+                }
+            }
+            
+            // Form submission handler
             if (registrationForm) {
-                registrationForm.addEventListener('submit', function(e) {
+                registrationForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
+                    
+                    // Validate terms
+                    const termsCheckbox = document.getElementById('terms');
+                    if (!termsCheckbox || !termsCheckbox.checked) {
+                        showMessage('error', 'Please agree to the terms and conditions');
+                        return;
+                    }
                     
                     // Get form data
                     const formData = new FormData(this);
-                    const data = Object.fromEntries(formData);
                     
-                    // Show notification
-                    showNotification('Registration submitted successfully! We will contact you soon.');
+                    // Submit to Firebase
+                    const result = await submitRegistrationToFirebase(formData);
                     
-                    // Reset form
-                    this.reset();
-                    
-                    // Set today's date
-                    const today = new Date().toISOString().split('T')[0];
-                    document.getElementById('date').value = today;
+                    if (result.success) {
+                        // Show success message
+                        showMessage('success', `Registration successful! Your registration ID: ${result.id}.`);
+                        
+                        // Reset form
+                        this.reset();
+                        
+                        // Set today's date
+                        const today = new Date().toISOString().split('T')[0];
+                        const dateInput = document.getElementById('date');
+                        if (dateInput) dateInput.value = today;
+                        
+                        // Update notification
+                        notification.textContent = 'Registration submitted successfully!';
+                        notification.classList.add('show');
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                        }, 3000);
+                        
+                    } else {
+                        showMessage('error', `Registration failed: ${result.error}`);
+                    }
                 });
             }
             
@@ -2333,16 +2678,251 @@
             const dateInput = document.getElementById('date');
             if (dateInput) {
                 dateInput.value = today;
+                dateInput.min = today; // Cannot select past dates
             }
             
-            // Show notification
-            function showNotification(message) {
-                notification.textContent = message;
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
+            // Check if user is already logged in
+            auth.onAuthStateChanged((user) => {
+                if (user && user.email === ADMIN_EMAIL) {
+                    // User is signed in as admin
+                    if (adminLoginBtn) adminLoginBtn.style.display = 'none';
+                    if (viewRegistrationsBtn) viewRegistrationsBtn.style.display = 'inline-block';
+                    if (logoutBtn) logoutBtn.style.display = 'inline-block';
+                } else {
+                    // User is signed out or not admin
+                    if (adminLoginBtn) adminLoginBtn.style.display = 'inline-block';
+                    if (viewRegistrationsBtn) viewRegistrationsBtn.style.display = 'none';
+                    if (logoutBtn) logoutBtn.style.display = 'none';
+                    if (adminPanel) adminPanel.style.display = 'none';
+                }
+            });
+            
+            // Admin Login
+            if (adminLoginBtn) {
+                adminLoginBtn.addEventListener('click', async () => {
+                    try {
+                        showLoading(true);
+                        
+                        // Use Firebase authentication
+                        await auth.signInWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD);
+                        showMessage('success', 'Admin login successful!');
+                        
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        showMessage('error', 'Login failed: ' + error.message);
+                    } finally {
+                        showLoading(false);
+                    }
+                });
+            }
+            
+            // View Registrations
+            if (viewRegistrationsBtn) {
+                viewRegistrationsBtn.addEventListener('click', async () => {
+                    try {
+                        showLoading(true);
+                        await loadRegistrations();
+                        if (adminPanel) adminPanel.style.display = 'block';
+                        
+                        // Scroll to admin panel
+                        adminPanel.scrollIntoView({ behavior: 'smooth' });
+                    } catch (error) {
+                        showMessage('error', 'Failed to load registrations: ' + error.message);
+                    } finally {
+                        showLoading(false);
+                    }
+                });
+            }
+            
+            // Logout
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    try {
+                        await auth.signOut();
+                        showMessage('success', 'Logged out successfully');
+                        if (adminPanel) adminPanel.style.display = 'none';
+                    } catch (error) {
+                        showMessage('error', 'Logout failed: ' + error.message);
+                    }
+                });
+            }
+            
+            // Load registrations from Firestore
+            async function loadRegistrations() {
+                try {
+                    const snapshot = await db.collection('registrations')
+                        .orderBy('timestamp', 'desc')
+                        .get();
+                    
+                    const tableBody = document.getElementById('registrationsTableBody');
+                    if (!tableBody) return;
+                    
+                    tableBody.innerHTML = '';
+                    
+                    let industryCount = 0;
+                    let academicCount = 0;
+                    let researchCount = 0;
+                    let studentCount = 0;
+                    let serialNo = 1;
+                    
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const row = document.createElement('tr');
+                        
+                        // Count by category
+                        switch(data.category) {
+                            case 'industry': industryCount++; break;
+                            case 'academic': academicCount++; break;
+                            case 'research': researchCount++; break;
+                            case 'student': studentCount++; break;
+                        }
+                        
+                        row.innerHTML = `
+                            <td>${serialNo}</td>
+                            <td>${data.name || ''}</td>
+                            <td>${data.email || ''}</td>
+                            <td>${data.organization || ''}</td>
+                            <td>${data.category || ''}</td>
+                            <td>${data.paperTitle || ''}</td>
+                            <td>${data.registrationDate ? new Date(data.registrationDate).toLocaleDateString() : ''}</td>
+                            <td>
+                                <button class="action-btn view-details" data-id="${doc.id}" style="padding: 5px 10px; font-size: 0.9rem;">View</button>
+                            </td>
+                        `;
+                        
+                        tableBody.appendChild(row);
+                        serialNo++;
+                    });
+                    
+                    // Update statistics
+                    const totalRegistrations = document.getElementById('totalRegistrations');
+                    if (totalRegistrations) totalRegistrations.textContent = snapshot.size;
+                    
+                    const industryCountEl = document.getElementById('industryCount');
+                    if (industryCountEl) industryCountEl.textContent = industryCount;
+                    
+                    const academicCountEl = document.getElementById('academicCount');
+                    if (academicCountEl) academicCountEl.textContent = academicCount;
+                    
+                    const researchCountEl = document.getElementById('researchCount');
+                    if (researchCountEl) researchCountEl.textContent = researchCount;
+                    
+                    const studentCountEl = document.getElementById('studentCount');
+                    if (studentCountEl) studentCountEl.textContent = studentCount;
+                    
+                    // Add event listeners to view buttons
+                    document.querySelectorAll('.view-details').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const registrationId = this.getAttribute('data-id');
+                            viewRegistrationDetails(registrationId);
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.error('Error loading registrations:', error);
+                    throw error;
+                }
+            }
+            
+            // View registration details
+            async function viewRegistrationDetails(registrationId) {
+                try {
+                    const doc = await db.collection('registrations').doc(registrationId).get();
+                    
+                    if (doc.exists) {
+                        const data = doc.data();
+                        
+                        let detailsHtml = `
+                            <h3>Registration Details (ID: ${registrationId})</h3>
+                            <p><strong>Name:</strong> ${data.name || ''}</p>
+                            <p><strong>Email:</strong> ${data.email || ''}</p>
+                            <p><strong>Phone:</strong> ${data.phone || ''}</p>
+                            <p><strong>Organization:</strong> ${data.organization || ''}</p>
+                            <p><strong>Address:</strong> ${data.address || ''}</p>
+                            <p><strong>Category:</strong> ${data.category || ''}</p>
+                            <p><strong>Paper Title:</strong> ${data.paperTitle || ''}</p>
+                            <p><strong>Authors:</strong> ${data.authors || ''}</p>
+                            <p><strong>UPI Reference:</strong> ${data.upi || 'Not provided'}</p>
+                            <p><strong>Bank:</strong> ${data.bank || 'Not provided'}</p>
+                            <p><strong>Registration Date:</strong> ${data.registrationDate ? new Date(data.registrationDate).toLocaleString() : ''}</p>
+                            <p><strong>Status:</strong> ${data.status || 'pending'}</p>
+                        `;
+                        
+                        alert(detailsHtml);
+                    } else {
+                        showMessage('error', 'Registration not found');
+                    }
+                } catch (error) {
+                    showMessage('error', 'Error loading details: ' + error.message);
+                }
+            }
+            
+            // Export to CSV
+            if (exportCSVBtn) {
+                exportCSVBtn.addEventListener('click', async () => {
+                    try {
+                        showLoading(true);
+                        const snapshot = await db.collection('registrations').get();
+                        
+                        let csvContent = "data:text/csv;charset=utf-8,";
+                        csvContent += "ID,Name,Email,Phone,Organization,Category,Paper Title,Authors,Registration Date,Status\n";
+                        
+                        snapshot.forEach((doc) => {
+                            const data = doc.data();
+                            const row = [
+                                doc.id,
+                                `"${data.name || ''}"`,
+                                data.email || '',
+                                data.phone || '',
+                                `"${data.organization || ''}"`,
+                                data.category || '',
+                                `"${data.paperTitle || ''}"`,
+                                `"${data.authors || ''}"`,
+                                data.registrationDate ? new Date(data.registrationDate).toLocaleDateString() : '',
+                                data.status || 'pending'
+                            ].join(',');
+                            
+                            csvContent += row + "\n";
+                        });
+                        
+                        // Create download link
+                        const encodedUri = encodeURI(csvContent);
+                        const link = document.createElement("a");
+                        link.setAttribute("href", encodedUri);
+                        link.setAttribute("download", "ncaidse_registrations.csv");
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        showMessage('success', 'CSV exported successfully');
+                    } catch (error) {
+                        showMessage('error', 'Export failed: ' + error.message);
+                    } finally {
+                        showLoading(false);
+                    }
+                });
+            }
+            
+            // Export to PDF (Basic implementation)
+            if (exportPDFBtn) {
+                exportPDFBtn.addEventListener('click', () => {
+                    alert('PDF export feature would require a PDF library like jsPDF. For now, use CSV export.');
+                });
+            }
+            
+            // Refresh data
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', async () => {
+                    try {
+                        showLoading(true);
+                        await loadRegistrations();
+                        showMessage('success', 'Data refreshed successfully');
+                    } catch (error) {
+                        showMessage('error', 'Refresh failed: ' + error.message);
+                    } finally {
+                        showLoading(false);
+                    }
+                });
             }
             
             // Countdown timer
@@ -2357,15 +2937,15 @@
                     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                     
-                    countdownDays.textContent = days.toString().padStart(2, '0');
-                    countdownHours.textContent = hours.toString().padStart(2, '0');
-                    countdownMinutes.textContent = minutes.toString().padStart(2, '0');
-                    countdownSeconds.textContent = seconds.toString().padStart(2, '0');
+                    if (countdownDays) countdownDays.textContent = days.toString().padStart(2, '0');
+                    if (countdownHours) countdownHours.textContent = hours.toString().padStart(2, '0');
+                    if (countdownMinutes) countdownMinutes.textContent = minutes.toString().padStart(2, '0');
+                    if (countdownSeconds) countdownSeconds.textContent = seconds.toString().padStart(2, '0');
                 } else {
-                    countdownDays.textContent = '00';
-                    countdownHours.textContent = '00';
-                    countdownMinutes.textContent = '00';
-                    countdownSeconds.textContent = '00';
+                    if (countdownDays) countdownDays.textContent = '00';
+                    if (countdownHours) countdownHours.textContent = '00';
+                    if (countdownMinutes) countdownMinutes.textContent = '00';
+                    if (countdownSeconds) countdownSeconds.textContent = '00';
                 }
             }
             
@@ -2404,31 +2984,11 @@
                 el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                 observer.observe(el);
             });
+            
+            // Initialize with current page
+            const currentPage = window.location.hash ? window.location.hash.substring(1) : 'home';
+            switchPage(currentPage);
         });
     </script>
-     <script>
-    // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCyPFhXiHD8rdaISngtfppUfObc11XUyFY",
-  authDomain: "mit-ise.firebaseapp.com",
-  projectId: "mit-ise",
-  storageBucket: "mit-ise.firebasestorage.app",
-  messagingSenderId: "1003313648930",
-  appId: "1:1003313648930:web:840975ff875ff2268a817b",
-  measurementId: "G-3H4MZ7MM9Z"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-    </script>
 </body>
-
 </html>
