@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK v9 (Modular) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    
     <style>
         * {
             margin: 0;
@@ -970,34 +965,7 @@
             transform: translateX(0);
         }
 
-        /* Firebase Admin Styles */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1003;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--accent-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
+        /* Form Messages */
         .success-message {
             background-color: #4CAF50;
             color: white;
@@ -1016,6 +984,7 @@
             display: none;
         }
         
+        /* Admin Table Styles (For Demo) */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
@@ -1162,11 +1131,6 @@
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-    </div>
-    
     <!-- Header -->
     <header>
         <div class="container header-container">
@@ -1613,27 +1577,25 @@
                         </form>
                     </div>
                     
-                    <!-- Admin Login Button -->
+                    <!-- Demo Admin Panel -->
                     <div style="text-align: center; margin-top: 30px;">
-                        <button id="adminLoginBtn" class="secondary-button">Admin Login</button>
-                        <button id="viewRegistrationsBtn" class="cta-button" style="display: none; margin-top: 10px;">View Registrations</button>
-                        <button id="logoutBtn" class="secondary-button" style="display: none; margin-top: 10px;">Logout</button>
+                        <button id="demoAdminBtn" class="secondary-button">View Demo Admin Panel</button>
                     </div>
                 </div>
             </div>
             
-            <!-- Admin Panel -->
-            <div id="adminPanel" style="display: none; padding: 80px 0; background-color: #f0f4f8;">
+            <!-- Demo Admin Panel -->
+            <div id="demoAdminPanel" style="display: none; padding: 80px 0; background-color: #f0f4f8;">
                 <div class="container">
                     <div class="section-title">
-                        <h2>Admin Panel - Registered Participants</h2>
-                        <p>Total Registrations: <span id="totalRegistrations">0</span></p>
+                        <h2>Demo Admin Panel - Registered Participants</h2>
+                        <p><em>Note: This is a demo panel. In a real implementation, this would connect to a database.</em></p>
+                        <p>Total Registrations: <span id="totalRegistrations">3</span></p>
                     </div>
                     
                     <div style="margin-bottom: 20px; text-align: center;">
-                        <button id="exportCSVBtn" class="action-btn">Export to CSV</button>
-                        <button id="exportPDFBtn" class="action-btn" style="margin-left: 10px;">Export to PDF</button>
-                        <button id="refreshBtn" class="action-btn" style="margin-left: 10px;">Refresh Data</button>
+                        <button id="demoExportCSVBtn" class="action-btn">Export Demo CSV</button>
+                        <button id="demoRefreshBtn" class="action-btn" style="margin-left: 10px;">Refresh Data</button>
                     </div>
                     
                     <div style="overflow-x: auto;">
@@ -1650,8 +1612,8 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="registrationsTableBody">
-                                <!-- Data will be loaded here -->
+                            <tbody id="demoRegistrationsTableBody">
+                                <!-- Demo data will be loaded here -->
                             </tbody>
                         </table>
                     </div>
@@ -1660,19 +1622,19 @@
                     <div style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                         <div class="stat-card">
                             <h3>Industry</h3>
-                            <p class="stat-number" id="industryCount">0</p>
+                            <p class="stat-number" id="demoIndustryCount">1</p>
                         </div>
                         <div class="stat-card">
                             <h3>Academic</h3>
-                            <p class="stat-number" id="academicCount">0</p>
+                            <p class="stat-number" id="demoAcademicCount">1</p>
                         </div>
                         <div class="stat-card">
                             <h3>Research Scholar</h3>
-                            <p class="stat-number" id="researchCount">0</p>
+                            <p class="stat-number" id="demoResearchCount">0</p>
                         </div>
                         <div class="stat-card">
                             <h3>Student</h3>
-                            <p class="stat-number" id="studentCount">0</p>
+                            <p class="stat-number" id="demoStudentCount">1</p>
                         </div>
                     </div>
                 </div>
@@ -1823,31 +1785,6 @@
     </footer>
 
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCyPFhXiHD8rdaISngtfppUfObc11XUyFY",
-            authDomain: "mit-ise.firebaseapp.com",
-            projectId: "mit-ise",
-            storageBucket: "mit-ise.firebasestorage.app",
-            messagingSenderId: "1003313648930",
-            appId: "1:1003313648930:web:840975ff875ff2268a817b",
-            measurementId: "G-3H4MZ7MM9Z"
-        };
-        
-        // Initialize Firebase
-        try {
-            firebase.initializeApp(firebaseConfig);
-        } catch (error) {
-            console.log("Firebase already initialized");
-        }
-        
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        
-        // Admin credentials (for demo purposes only)
-        const ADMIN_EMAIL = "admin@ncaidse.com";
-        const ADMIN_PASSWORD = "admin123";
-        
         // Tourist Data
         const touristData = [
             {
@@ -2205,6 +2142,37 @@
             "Any other topics related to CSE domain"
         ];
 
+        // Demo registrations data
+        const demoRegistrations = [
+            {
+                id: "REG001",
+                name: "Dr. Rajesh Kumar",
+                email: "rajesh.kumar@university.edu",
+                organization: "University of Technology",
+                category: "academic",
+                paperTitle: "Advancements in Machine Learning Algorithms",
+                date: "2025-02-15"
+            },
+            {
+                id: "REG002",
+                name: "Ms. Priya Sharma",
+                email: "priya.sharma@student.edu",
+                organization: "MIT Kundapura",
+                category: "student",
+                paperTitle: "Data Science Applications in Healthcare",
+                date: "2025-02-16"
+            },
+            {
+                id: "REG003",
+                name: "Mr. Vikram Singh",
+                email: "vikram@techcorp.com",
+                organization: "Tech Solutions Inc.",
+                category: "industry",
+                paperTitle: "Cloud Computing Security Challenges",
+                date: "2025-02-17"
+            }
+        ];
+
         document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
             const navLinks = document.querySelectorAll('.nav-link, .footer-links a[data-page]');
@@ -2226,19 +2194,15 @@
             const countdownHours = document.getElementById('hours');
             const countdownMinutes = document.getElementById('minutes');
             const countdownSeconds = document.getElementById('seconds');
-            const loadingOverlay = document.getElementById('loadingOverlay');
             const registrationStatus = document.getElementById('registrationStatus');
             const registrationError = document.getElementById('registrationError');
             const submitBtn = document.getElementById('submitBtn');
             const submitText = document.getElementById('submitText');
             const submitSpinner = document.getElementById('submitSpinner');
-            const adminLoginBtn = document.getElementById('adminLoginBtn');
-            const viewRegistrationsBtn = document.getElementById('viewRegistrationsBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const adminPanel = document.getElementById('adminPanel');
-            const exportCSVBtn = document.getElementById('exportCSVBtn');
-            const exportPDFBtn = document.getElementById('exportPDFBtn');
-            const refreshBtn = document.getElementById('refreshBtn');
+            const demoAdminBtn = document.getElementById('demoAdminBtn');
+            const demoAdminPanel = document.getElementById('demoAdminPanel');
+            const demoExportCSVBtn = document.getElementById('demoExportCSVBtn');
+            const demoRefreshBtn = document.getElementById('demoRefreshBtn');
 
             // Initialize topics
             renderTopics();
@@ -2249,6 +2213,9 @@
             // Initialize countdown timer
             updateCountdown();
             setInterval(updateCountdown, 1000);
+            
+            // Initialize demo admin panel
+            loadDemoRegistrations();
 
             // Function to switch between pages
             function switchPage(pageId) {
@@ -2314,6 +2281,12 @@
             // Explore tourist button
             exploreTouristBtn.addEventListener('click', function() {
                 switchPage('tourist');
+            });
+            
+            // Demo Admin Panel button
+            demoAdminBtn.addEventListener('click', function() {
+                demoAdminPanel.style.display = 'block';
+                demoAdminPanel.scrollIntoView({ behavior: 'smooth' });
             });
             
             // Render topics
@@ -2540,21 +2513,6 @@
                 }
             });
             
-            // Function to show/hide loading
-            function showLoading(show) {
-                if (show) {
-                    loadingOverlay.style.display = 'flex';
-                    if (submitText) submitText.style.display = 'none';
-                    if (submitSpinner) submitSpinner.style.display = 'block';
-                    if (submitBtn) submitBtn.disabled = true;
-                } else {
-                    loadingOverlay.style.display = 'none';
-                    if (submitText) submitText.style.display = 'block';
-                    if (submitSpinner) submitSpinner.style.display = 'none';
-                    if (submitBtn) submitBtn.disabled = false;
-                }
-            }
-            
             // Function to show success/error messages
             function showMessage(type, message) {
                 if (type === 'success') {
@@ -2586,53 +2544,9 @@
                 }
             }
             
-            // Firebase Registration Function
-            async function submitRegistrationToFirebase(formData) {
-                try {
-                    showLoading(true);
-                    
-                    // Generate a unique ID for the registration
-                    const registrationId = 'REG' + Date.now() + Math.random().toString(36).substr(2, 9);
-                    
-                    // Prepare registration data
-                    const registrationData = {
-                        id: registrationId,
-                        name: formData.get('name'),
-                        organization: formData.get('organization'),
-                        address: formData.get('address'),
-                        phone: formData.get('phone'),
-                        email: formData.get('email'),
-                        upi: formData.get('upi') || '',
-                        date: formData.get('date'),
-                        bank: formData.get('bank') || '',
-                        paperTitle: formData.get('paperTitle'),
-                        authors: formData.get('authors'),
-                        category: formData.get('category'),
-                        paymentProof: formData.get('paymentProof') ? 'Uploaded' : 'Not provided',
-                        termsAccepted: true,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        status: 'pending',
-                        registrationDate: new Date().toISOString()
-                    };
-                    
-                    // Add registration to Firestore
-                    await db.collection('registrations').doc(registrationId).set(registrationData);
-                    
-                    console.log('Registration saved to Firebase:', registrationData);
-                    
-                    return { success: true, id: registrationId, data: registrationData };
-                    
-                } catch (error) {
-                    console.error('Error saving registration to Firebase:', error);
-                    return { success: false, error: error.message };
-                } finally {
-                    showLoading(false);
-                }
-            }
-            
             // Form submission handler
             if (registrationForm) {
-                registrationForm.addEventListener('submit', async function(e) {
+                registrationForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
                     // Validate terms
@@ -2642,15 +2556,18 @@
                         return;
                     }
                     
-                    // Get form data
-                    const formData = new FormData(this);
+                    // Show loading state
+                    if (submitText) submitText.style.display = 'none';
+                    if (submitSpinner) submitSpinner.style.display = 'block';
+                    if (submitBtn) submitBtn.disabled = true;
                     
-                    // Submit to Firebase
-                    const result = await submitRegistrationToFirebase(formData);
-                    
-                    if (result.success) {
+                    // Simulate form submission (in a real app, this would send to a server)
+                    setTimeout(() => {
+                        // Generate a registration ID
+                        const registrationId = 'REG' + Date.now().toString().substr(-6);
+                        
                         // Show success message
-                        showMessage('success', `Registration successful! Your registration ID: ${result.id}.`);
+                        showMessage('success', `Registration successful! Your registration ID: ${registrationId}. Please save this ID for future reference.`);
                         
                         // Reset form
                         this.reset();
@@ -2667,9 +2584,12 @@
                             notification.classList.remove('show');
                         }, 3000);
                         
-                    } else {
-                        showMessage('error', `Registration failed: ${result.error}`);
-                    }
+                        // Reset button state
+                        if (submitText) submitText.style.display = 'block';
+                        if (submitSpinner) submitSpinner.style.display = 'none';
+                        if (submitBtn) submitBtn.disabled = false;
+                        
+                    }, 1500); // Simulate 1.5 second processing time
                 });
             }
             
@@ -2681,247 +2601,134 @@
                 dateInput.min = today; // Cannot select past dates
             }
             
-            // Check if user is already logged in
-            auth.onAuthStateChanged((user) => {
-                if (user && user.email === ADMIN_EMAIL) {
-                    // User is signed in as admin
-                    if (adminLoginBtn) adminLoginBtn.style.display = 'none';
-                    if (viewRegistrationsBtn) viewRegistrationsBtn.style.display = 'inline-block';
-                    if (logoutBtn) logoutBtn.style.display = 'inline-block';
+            // Load demo registrations
+            function loadDemoRegistrations() {
+                const tableBody = document.getElementById('demoRegistrationsTableBody');
+                if (!tableBody) return;
+                
+                tableBody.innerHTML = '';
+                
+                let industryCount = 0;
+                let academicCount = 0;
+                let researchCount = 0;
+                let studentCount = 0;
+                let serialNo = 1;
+                
+                demoRegistrations.forEach(registration => {
+                    const row = document.createElement('tr');
+                    
+                    // Count by category
+                    switch(registration.category) {
+                        case 'industry': industryCount++; break;
+                        case 'academic': academicCount++; break;
+                        case 'research': researchCount++; break;
+                        case 'student': studentCount++; break;
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${serialNo}</td>
+                        <td>${registration.name}</td>
+                        <td>${registration.email}</td>
+                        <td>${registration.organization}</td>
+                        <td>${registration.category}</td>
+                        <td>${registration.paperTitle}</td>
+                        <td>${new Date(registration.date).toLocaleDateString()}</td>
+                        <td>
+                            <button class="action-btn view-demo-details" data-id="${registration.id}" style="padding: 5px 10px; font-size: 0.9rem;">View</button>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                    serialNo++;
+                });
+                
+                // Update statistics
+                const totalRegistrations = document.getElementById('totalRegistrations');
+                if (totalRegistrations) totalRegistrations.textContent = demoRegistrations.length;
+                
+                const industryCountEl = document.getElementById('demoIndustryCount');
+                if (industryCountEl) industryCountEl.textContent = industryCount;
+                
+                const academicCountEl = document.getElementById('demoAcademicCount');
+                if (academicCountEl) academicCountEl.textContent = academicCount;
+                
+                const researchCountEl = document.getElementById('demoResearchCount');
+                if (researchCountEl) researchCountEl.textContent = researchCount;
+                
+                const studentCountEl = document.getElementById('demoStudentCount');
+                if (studentCountEl) studentCountEl.textContent = studentCount;
+                
+                // Add event listeners to view buttons
+                document.querySelectorAll('.view-demo-details').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const registrationId = this.getAttribute('data-id');
+                        viewDemoRegistrationDetails(registrationId);
+                    });
+                });
+            }
+            
+            // View demo registration details
+            function viewDemoRegistrationDetails(registrationId) {
+                const registration = demoRegistrations.find(r => r.id === registrationId);
+                
+                if (registration) {
+                    let detailsHtml = `
+                        <h3>Registration Details (ID: ${registration.id})</h3>
+                        <p><strong>Name:</strong> ${registration.name}</p>
+                        <p><strong>Email:</strong> ${registration.email}</p>
+                        <p><strong>Organization:</strong> ${registration.organization}</p>
+                        <p><strong>Category:</strong> ${registration.category}</p>
+                        <p><strong>Paper Title:</strong> ${registration.paperTitle}</p>
+                        <p><strong>Registration Date:</strong> ${new Date(registration.date).toLocaleDateString()}</p>
+                        <p><strong>Status:</strong> Confirmed</p>
+                        <p><em>Note: This is demo data. In a real implementation, more details would be available.</em></p>
+                    `;
+                    
+                    alert(detailsHtml);
                 } else {
-                    // User is signed out or not admin
-                    if (adminLoginBtn) adminLoginBtn.style.display = 'inline-block';
-                    if (viewRegistrationsBtn) viewRegistrationsBtn.style.display = 'none';
-                    if (logoutBtn) logoutBtn.style.display = 'none';
-                    if (adminPanel) adminPanel.style.display = 'none';
+                    showMessage('error', 'Registration not found in demo data');
                 }
-            });
-            
-            // Admin Login
-            if (adminLoginBtn) {
-                adminLoginBtn.addEventListener('click', async () => {
-                    try {
-                        showLoading(true);
-                        
-                        // Use Firebase authentication
-                        await auth.signInWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD);
-                        showMessage('success', 'Admin login successful!');
-                        
-                    } catch (error) {
-                        console.error('Login error:', error);
-                        showMessage('error', 'Login failed: ' + error.message);
-                    } finally {
-                        showLoading(false);
-                    }
-                });
             }
             
-            // View Registrations
-            if (viewRegistrationsBtn) {
-                viewRegistrationsBtn.addEventListener('click', async () => {
-                    try {
-                        showLoading(true);
-                        await loadRegistrations();
-                        if (adminPanel) adminPanel.style.display = 'block';
-                        
-                        // Scroll to admin panel
-                        adminPanel.scrollIntoView({ behavior: 'smooth' });
-                    } catch (error) {
-                        showMessage('error', 'Failed to load registrations: ' + error.message);
-                    } finally {
-                        showLoading(false);
-                    }
-                });
-            }
-            
-            // Logout
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', async () => {
-                    try {
-                        await auth.signOut();
-                        showMessage('success', 'Logged out successfully');
-                        if (adminPanel) adminPanel.style.display = 'none';
-                    } catch (error) {
-                        showMessage('error', 'Logout failed: ' + error.message);
-                    }
-                });
-            }
-            
-            // Load registrations from Firestore
-            async function loadRegistrations() {
-                try {
-                    const snapshot = await db.collection('registrations')
-                        .orderBy('timestamp', 'desc')
-                        .get();
+            // Export demo CSV
+            if (demoExportCSVBtn) {
+                demoExportCSVBtn.addEventListener('click', function() {
+                    let csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "ID,Name,Email,Organization,Category,Paper Title,Registration Date,Status\n";
                     
-                    const tableBody = document.getElementById('registrationsTableBody');
-                    if (!tableBody) return;
-                    
-                    tableBody.innerHTML = '';
-                    
-                    let industryCount = 0;
-                    let academicCount = 0;
-                    let researchCount = 0;
-                    let studentCount = 0;
-                    let serialNo = 1;
-                    
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const row = document.createElement('tr');
+                    demoRegistrations.forEach(registration => {
+                        const row = [
+                            registration.id,
+                            `"${registration.name}"`,
+                            registration.email,
+                            `"${registration.organization}"`,
+                            registration.category,
+                            `"${registration.paperTitle}"`,
+                            new Date(registration.date).toLocaleDateString(),
+                            'Confirmed'
+                        ].join(',');
                         
-                        // Count by category
-                        switch(data.category) {
-                            case 'industry': industryCount++; break;
-                            case 'academic': academicCount++; break;
-                            case 'research': researchCount++; break;
-                            case 'student': studentCount++; break;
-                        }
-                        
-                        row.innerHTML = `
-                            <td>${serialNo}</td>
-                            <td>${data.name || ''}</td>
-                            <td>${data.email || ''}</td>
-                            <td>${data.organization || ''}</td>
-                            <td>${data.category || ''}</td>
-                            <td>${data.paperTitle || ''}</td>
-                            <td>${data.registrationDate ? new Date(data.registrationDate).toLocaleDateString() : ''}</td>
-                            <td>
-                                <button class="action-btn view-details" data-id="${doc.id}" style="padding: 5px 10px; font-size: 0.9rem;">View</button>
-                            </td>
-                        `;
-                        
-                        tableBody.appendChild(row);
-                        serialNo++;
+                        csvContent += row + "\n";
                     });
                     
-                    // Update statistics
-                    const totalRegistrations = document.getElementById('totalRegistrations');
-                    if (totalRegistrations) totalRegistrations.textContent = snapshot.size;
+                    // Create download link
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "ncaidse_demo_registrations.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                     
-                    const industryCountEl = document.getElementById('industryCount');
-                    if (industryCountEl) industryCountEl.textContent = industryCount;
-                    
-                    const academicCountEl = document.getElementById('academicCount');
-                    if (academicCountEl) academicCountEl.textContent = academicCount;
-                    
-                    const researchCountEl = document.getElementById('researchCount');
-                    if (researchCountEl) researchCountEl.textContent = researchCount;
-                    
-                    const studentCountEl = document.getElementById('studentCount');
-                    if (studentCountEl) studentCountEl.textContent = studentCount;
-                    
-                    // Add event listeners to view buttons
-                    document.querySelectorAll('.view-details').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const registrationId = this.getAttribute('data-id');
-                            viewRegistrationDetails(registrationId);
-                        });
-                    });
-                    
-                } catch (error) {
-                    console.error('Error loading registrations:', error);
-                    throw error;
-                }
-            }
-            
-            // View registration details
-            async function viewRegistrationDetails(registrationId) {
-                try {
-                    const doc = await db.collection('registrations').doc(registrationId).get();
-                    
-                    if (doc.exists) {
-                        const data = doc.data();
-                        
-                        let detailsHtml = `
-                            <h3>Registration Details (ID: ${registrationId})</h3>
-                            <p><strong>Name:</strong> ${data.name || ''}</p>
-                            <p><strong>Email:</strong> ${data.email || ''}</p>
-                            <p><strong>Phone:</strong> ${data.phone || ''}</p>
-                            <p><strong>Organization:</strong> ${data.organization || ''}</p>
-                            <p><strong>Address:</strong> ${data.address || ''}</p>
-                            <p><strong>Category:</strong> ${data.category || ''}</p>
-                            <p><strong>Paper Title:</strong> ${data.paperTitle || ''}</p>
-                            <p><strong>Authors:</strong> ${data.authors || ''}</p>
-                            <p><strong>UPI Reference:</strong> ${data.upi || 'Not provided'}</p>
-                            <p><strong>Bank:</strong> ${data.bank || 'Not provided'}</p>
-                            <p><strong>Registration Date:</strong> ${data.registrationDate ? new Date(data.registrationDate).toLocaleString() : ''}</p>
-                            <p><strong>Status:</strong> ${data.status || 'pending'}</p>
-                        `;
-                        
-                        alert(detailsHtml);
-                    } else {
-                        showMessage('error', 'Registration not found');
-                    }
-                } catch (error) {
-                    showMessage('error', 'Error loading details: ' + error.message);
-                }
-            }
-            
-            // Export to CSV
-            if (exportCSVBtn) {
-                exportCSVBtn.addEventListener('click', async () => {
-                    try {
-                        showLoading(true);
-                        const snapshot = await db.collection('registrations').get();
-                        
-                        let csvContent = "data:text/csv;charset=utf-8,";
-                        csvContent += "ID,Name,Email,Phone,Organization,Category,Paper Title,Authors,Registration Date,Status\n";
-                        
-                        snapshot.forEach((doc) => {
-                            const data = doc.data();
-                            const row = [
-                                doc.id,
-                                `"${data.name || ''}"`,
-                                data.email || '',
-                                data.phone || '',
-                                `"${data.organization || ''}"`,
-                                data.category || '',
-                                `"${data.paperTitle || ''}"`,
-                                `"${data.authors || ''}"`,
-                                data.registrationDate ? new Date(data.registrationDate).toLocaleDateString() : '',
-                                data.status || 'pending'
-                            ].join(',');
-                            
-                            csvContent += row + "\n";
-                        });
-                        
-                        // Create download link
-                        const encodedUri = encodeURI(csvContent);
-                        const link = document.createElement("a");
-                        link.setAttribute("href", encodedUri);
-                        link.setAttribute("download", "ncaidse_registrations.csv");
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        
-                        showMessage('success', 'CSV exported successfully');
-                    } catch (error) {
-                        showMessage('error', 'Export failed: ' + error.message);
-                    } finally {
-                        showLoading(false);
-                    }
+                    showMessage('success', 'Demo CSV exported successfully');
                 });
             }
             
-            // Export to PDF (Basic implementation)
-            if (exportPDFBtn) {
-                exportPDFBtn.addEventListener('click', () => {
-                    alert('PDF export feature would require a PDF library like jsPDF. For now, use CSV export.');
-                });
-            }
-            
-            // Refresh data
-            if (refreshBtn) {
-                refreshBtn.addEventListener('click', async () => {
-                    try {
-                        showLoading(true);
-                        await loadRegistrations();
-                        showMessage('success', 'Data refreshed successfully');
-                    } catch (error) {
-                        showMessage('error', 'Refresh failed: ' + error.message);
-                    } finally {
-                        showLoading(false);
-                    }
+            // Refresh demo data
+            if (demoRefreshBtn) {
+                demoRefreshBtn.addEventListener('click', function() {
+                    loadDemoRegistrations();
+                    showMessage('success', 'Demo data refreshed');
                 });
             }
             
