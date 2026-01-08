@@ -1440,7 +1440,7 @@
                             <p>Our institution is accredited by NAAC. The institution offers 6 UG programmes, namely CSE, ISE, ECE, CSE-DS, AI & ML, and CSE-AI & ML, and 2 PG programmes (MBA and MCA).</p>
                         </div>
                         <div class="college-image">
-                            <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="College Campus">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8pPux2t7GQ1xjByOANhwG16lss9KWqP-5mg&s" alt="College Campus">
                         </div>
                     </div>
                 </div>
@@ -1474,108 +1474,107 @@
         </section>
 
         <!-- Registration Page -->
-        <section id="registration" class="page">
-            <div class="registration">
-                <div class="container">
-                    <div class="section-title">
-                        <h2>Registration Form</h2>
-                        <p id="registrationStatus" class="success-message"></p>
-                        <p id="registrationError" class="error-message"></p>
+<section id="registration" class="page">
+    <div class="registration">
+        <div class="container">
+            <div class="section-title">
+                <h2>Registration Form</h2>
+                <p>Complete the form below to register for NCAIDSE 2026</p>
+                <p id="registrationStatus" class="success-message"></p>
+                <p id="registrationError" class="error-message"></p>
+            </div>
+            
+            <div class="registration-form-container">
+                <!-- Google Form Container -->
+                <div class="google-form-wrapper">
+                    <div class="form-header">
+                        <h3>NCAIDSE 2026 Registration Form</h3>
+                        <p>Please fill out all required fields accurately. After submission, you will receive a confirmation email.</p>
                     </div>
                     
-                    <div class="registration-form-container">
-                        <form id="conferenceRegistrationForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name">Name (Prof./Dr./Mr./Mrs./Ms.)</label>
-                                    <input type="text" id="name" name="name" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="organization">Organization</label>
-                                    <input type="text" id="organization" name="organization" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="address">Address</label>
-                                <textarea id="address" name="address" rows="3" required></textarea>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="phone">Phone</label>
-                                    <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}">
-                                    <small>Format: 10-digit number</small>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="upi">UPI Reference No.</label>
-                                    <input type="text" id="upi" name="upi" pattern="[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}">
-                                    <small>Format: example@upi</small>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="date">Date</label>
-                                    <input type="date" id="date" name="date" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="bank">Bank Name</label>
-                                <input type="text" id="bank" name="bank">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="paperTitle">Title of the Paper</label>
-                                <input type="text" id="paperTitle" name="paperTitle" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="authors">Author(s)</label>
-                                <textarea id="authors" name="authors" rows="3" required></textarea>
-                                <small>Separate multiple authors with commas</small>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="category">Registration Category</label>
-                                <select id="category" name="category" required>
-                                    <option value="">Select Category</option>
-                                    <option value="industry">Industry Participants - Rs. 1,000/-</option>
-                                    <option value="academic">Academic Staff - Rs. 750/-</option>
-                                    <option value="research">Research Scholar - Rs. 500/-</option>
-                                    <option value="student">Student - Rs. 500/-</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="paymentProof">Payment Proof Upload (Optional)</label>
-                                <input type="file" id="paymentProof" name="paymentProof" accept=".pdf,.jpg,.jpeg,.png">
-                                <small>Accepted formats: PDF, JPG, PNG (Max 5MB)</small>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>
-                                    <input type="checkbox" id="terms" name="terms" required>
-                                    I agree to the <a href="#" id="termsLink">terms and conditions</a>
-                                </label>
-                            </div>
-                            
-                            <button type="submit" class="cta-button" style="width: 100%;" id="submitBtn">
-                                <span id="submitText">Submit Registration</span>
-                                <div id="submitSpinner" style="display: none;">
-                                    <i class="fas fa-spinner fa-spin"></i> Processing...
-                                </div>
-                            </button>
-                        </form>
+                    <!-- Loading indicator -->
+                    <div id="formLoading" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary-color); margin-bottom: 15px;"></i>
+                        <p>Loading registration form...</p>
                     </div>
+                    
+                    <!-- Google Form iframe -->
+                    <iframe 
+                        src="https://docs.google.com/forms/d/e/1FAIpQLSfSTgQggka69AkysN_VRk5TI-hq0DPru9D_Bg3QZap8xzeVcQ/viewform?embedded=true"
+                        width="100%" 
+                        height="1300" 
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0"
+                        style="border: none; border-radius: 8px;"
+                        onload="document.getElementById('formLoading').style.display='none';"
+                        title="NCAIDSE 2026 Registration Form">
+                        Loading…
+                    </iframe>
+                    
+                    <div class="form-instructions">
+                        <h4>Important Information:</h4>
+                        <ul>
+                            <li>All fields marked with * are required</li>
+                            <li>Use a valid email address to receive confirmation</li>
+                            <li>For multiple papers, each author must register separately</li>
+                            <li>Registration fee must be paid within 7 days of submission</li>
+                            <li>Contact ncaidse2026@gmail.com for any queries</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="form-redirect-note">
+                        <p><strong>Note:</strong> If the form doesn't load properly, <a href="https://docs.google.com/forms/d/e/1FAIpQLSfSTgQggka69AkysN_VRk5TI-hq0DPru9D_Bg3QZap8xzeVcQ/viewform?usp=header" target="_blank">click here to open the form in a new tab</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Information -->
+    <div class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Information</h2>
+                <p>For registration assistance or queries</p>
+            </div>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email</h3>
+                    <p>ncaidse2026@gmail.com</p>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Phone</h3>
+                    <p>Prof. Lakshmi G: 8921897549</p>
+                    <p>Prof. Gagan Bangera: 8073568220</p>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Address</h3>
+                    <p>Department of CSE(DS) and ISE<br>
+                    Moodlakatte Institute of Technology,<br>
+                    Kundapura, Udupi, Karnataka - 576217</p>
+                </div>
+            </div>
+            
+            <!-- Map -->
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.300547494563!2d74.6865635759022!3d13.062864187274576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba3526d8479d8bb%3A0x849248b13a7dd67b!2sMoodlakatte%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1690987654321!5m2!1sen!2sin" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
                     
                     <!-- Demo Admin Panel -->
                     <div style="text-align: center; margin-top: 30px;">
