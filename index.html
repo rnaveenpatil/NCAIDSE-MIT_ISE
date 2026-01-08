@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCAIDSE 2026 | National Conference on Advances in Information and Data Science Engineering</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0a2c5e;
+            --secondary-color: #1a5fb4;
+            --accent-color: #e63946;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --gold-color: #d4af37;
+            --green-color: #2a9d8f;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo-img {
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-subtext {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition);
+            padding: 5px 0;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover {
+            color: #fff;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(10, 44, 94, 0.9), rgba(10, 44, 94, 0.8)), url('https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--gold-color);
+        }
+
+        .hero-dates {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+        }
+
+        .hero-location {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(230, 57, 70, 0.3);
+        }
+
+        .cta-button:hover {
+            background-color: #c1121f;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(230, 57, 70, 0.4);
+        }
+
+        .secondary-button {
+            background-color: transparent;
+            border: 2px solid white;
+            margin-left: 15px;
+        }
+
+        .secondary-button:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        /* Section Title */
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /* Conference Info */
+        .conference-info {
+            padding: 80px 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .info-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .info-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .info-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+
+        /* Topics */
+        .topics {
+            padding: 80px 0;
+            background-color: #f0f4f8;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .topic-item {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border-left: 4px solid var(--secondary-color);
+            cursor: pointer;
+        }
+
+        .topic-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-left-color: var(--accent-color);
+        }
+
+        /* Committee Section */
+        .committee {
+            padding: 80px 0;
+            background-color: #f0f4f8;
+        }
+
+        .committee-category {
+            margin-bottom: 40px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .committee-category h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .committee-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .committee-member {
+            padding: 15px;
+            border-left: 4px solid var(--secondary-color);
+            background-color: #f8f9fa;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .member-role {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .member-affiliation {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Dates & Fees */
+        .dates-fees {
+            padding: 80px 0;
+        }
+
+        .dates-fees-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .dates-card, .fees-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .dates-card h3, .fees-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .date-item, .fee-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .date-label, .fee-category {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .date-value {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .fee-amount {
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* About College */
+        .about-college {
+            padding: 80px 0;
+            background-color: #f0f4f8;
+        }
+
+        .college-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .college-text h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .college-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .college-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Departments */
+        .departments {
+            padding: 80px 0;
+        }
+
+        .dept-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .dept-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+        }
+
+        .dept-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .dept-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .dept-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        /* Registration Form */
+        .registration {
+            padding: 80px 0;
+        }
+
+        .registration-form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(10, 44, 94, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Tourist Attractions */
+        .tourist-hero {
+            background: linear-gradient(rgba(10, 44, 94, 0.9), rgba(10, 44, 94, 0.8)), url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 80px;
+        }
+
+        .tourist-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .tourist-hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* Tourist Categories */
+        .tourist-categories {
+            padding: 40px 0;
+            background-color: #f0f4f8;
+        }
+
+        .categories-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .category-btn {
+            background-color: white;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        /* Tourist Grid */
+        .tourist-grid {
+            padding: 80px 0;
+        }
+
+        .tourist-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            margin-bottom: 40px;
+            display: none;
+        }
+
+        .tourist-card.show {
+            display: block;
+        }
+
+        .tourist-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .tourist-image {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tourist-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .tourist-card:hover .tourist-image img {
+            transform: scale(1.05);
+        }
+
+        .tourist-category {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .tourist-info {
+            padding: 30px;
+        }
+
+        .tourist-name {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .tourist-distance {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .tourist-description {
+            color: var(--gray-color);
+            margin-bottom: 20px;
+        }
+
+        .tourist-details {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .details-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .details-list {
+            list-style-type: none;
+        }
+
+        .details-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .details-list li::before {
+            content: '•';
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+
+        .timing-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .timing-item {
+            margin-bottom: 10px;
+        }
+
+        .timing-label {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .tourist-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .action-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* Map Section */
+        .map-section {
+            padding: 80px 0;
+            background-color: #f0f4f8;
+        }
+
+        .map-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            height: 500px;
+        }
+
+        /* Contact */
+        .contact {
+            padding: 80px 0;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--gray-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--accent-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: white;
+            position: relative;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #2a4a7a;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Countdown Timer */
+        .countdown {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .countdown-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .countdown-timer {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: 700;
+            background-color: var(--accent-color);
+            color: white;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            z-index: 1002;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1, .tourist-hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary-color);
+                flex-direction: column;
+                padding: 20px 0;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            nav ul.show {
+                display: flex;
+            }
+
+            nav ul li {
+                margin: 0;
+                text-align: center;
+                padding: 15px 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero, .tourist-hero {
+                padding: 80px 0;
+            }
+
+            .hero h1, .tourist-hero h1 {
+                font-size: 2rem;
+            }
+
+            .tourist-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .countdown-timer {
+                flex-wrap: wrap;
+            }
+
+            .countdown-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1, .tourist-hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .cta-button {
+                padding: 12px 30px;
+                font-size: 1rem;
+                display: block;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+            
+            .secondary-button {
+                margin-left: 0;
+            }
+
+            .timing-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo-container" id="logoHome">
+                <div class="logo-img">
+                    <div style="width: 60px; height: 60px; background-color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-color); font-size: 1.5rem; font-weight: bold;">MIT</div>
+                </div>
+                <div>
+                    <div class="logo-text">NCAIDSE 2026</div>
+                    <div class="logo-subtext">National Conference on Advances in Information and Data Science Engineering</div>
+                </div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="committee">Committee</a></li>
+                    <li><a href="#" class="nav-link" data-page="dates">Dates & Fees</a></li>
+                    <li><a href="#" class="nav-link" data-page="college">About College</a></li>
+                    <li><a href="#" class="nav-link" data-page="registration">Registration</a></li>
+                    <li><a href="#" class="nav-link" data-page="tourist">Tourist Places</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        Form submitted successfully!
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-subtitle">First National Conference On</div>
+                    <h1>ADVANCES IN INFORMATION AND DATA SCIENCE ENGINEERING</h1>
+                    <div class="hero-dates">19 - 20 MARCH 2026</div>
+                    <div class="hero-location">Moodlakatte Institute of Technology, Kundapura, Udupi, Karnataka</div>
+                    
+                    <!-- Countdown Timer -->
+                    <div class="countdown">
+                        <div class="countdown-title">Conference Starts In:</div>
+                        <div class="countdown-timer" id="countdownTimer">
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="days">00</div>
+                                <div class="countdown-label">Days</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="hours">00</div>
+                                <div class="countdown-label">Hours</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="minutes">00</div>
+                                <div class="countdown-label">Minutes</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number" id="seconds">00</div>
+                                <div class="countdown-label">Seconds</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <button class="cta-button" id="registerHomeBtn">Register Now</button>
+                        <button class="cta-button secondary-button" data-page="tourist">Explore Tourist Places</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="conference-info">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>About the Conference</h2>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <h3>Scope</h3>
+                            <p>The aim of the conference is to provide a forum for technocrats, research scholars, and representatives from academics and industry to present their findings and exchange knowledge and expertise.</p>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-microphone"></i>
+                            </div>
+                            <h3>Sessions Include</h3>
+                            <ul style="text-align: left; padding-left: 20px;">
+                                <li>Keynote address</li>
+                                <li>Regular Paper Presentation</li>
+                                <li>Short Paper Presentation</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <h3>Paper Submission</h3>
+                            <p>Full papers not exceeding 6 pages (Short papers 3 pages) in IEEE format should be sent to <strong>ncaidse2026@gmail.com</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Topics -->
+            <div class="topics">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Key Topics</h2>
+                    </div>
+                    
+                    <div class="topics-grid" id="topicsGrid">
+                        <!-- Topics will be dynamically added -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Committee Page -->
+        <section id="committee" class="page">
+            <div class="committee">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Organizing Committee</h2>
+                    </div>
+                    
+                    <div class="committee-category">
+                        <h3>Chief Patron</h3>
+                        <div class="committee-list">
+                            <div class="committee-member">
+                                <div class="member-name">Shri Siddhartha J. Shetty</div>
+                                <div class="member-role">Chairman</div>
+                                <div class="member-affiliation">IMJ Group of Institutions</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-category">
+                        <h3>Patrons</h3>
+                        <div class="committee-list">
+                            <div class="committee-member">
+                                <div class="member-name">Dr. S.N Bhat</div>
+                                <div class="member-role">Director</div>
+                                <div class="member-affiliation">IMJ Group of Institutions</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. Ramakrishna Hegde</div>
+                                <div class="member-role">Principal</div>
+                                <div class="member-affiliation">MIT Kundapura</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-category">
+                        <h3>Conveners</h3>
+                        <div class="committee-list">
+                            <div class="committee-member">
+                                <div class="member-name">Dr. J. Prakash</div>
+                                <div class="member-role">HOD - ISE</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. Sam Abraham</div>
+                                <div class="member-role">HOD - CSE(DS)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-category">
+                        <h3>Advisory Committee</h3>
+                        <div class="committee-list">
+                            <div class="committee-member">
+                                <div class="member-name">Dr. N. Sengottaiyan</div>
+                                <div class="member-affiliation">Alliance University</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. Rajesh Sharma R</div>
+                                <div class="member-affiliation">Alliance University</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. M. Duraipandian</div>
+                                <div class="member-affiliation">HIT</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. Ananthamoorthy N P</div>
+                                <div class="member-affiliation">HICET</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Mrs. Amruthamala</div>
+                                <div class="member-affiliation">IMJ</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Mr. Aditya</div>
+                                <div class="member-affiliation">IMJ</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. Indra Vijay Singh</div>
+                                <div class="member-affiliation">MITK</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. Annamalai M</div>
+                                <div class="member-affiliation">MITK</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. Varuna Kumara</div>
+                                <div class="member-affiliation">MITK</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Dr. Nikhila Pai</div>
+                                <div class="member-affiliation">MITK</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="committee-category">
+                        <h3>Organizing Committee</h3>
+                        <div class="committee-list">
+                            <div class="committee-member">
+                                <div class="member-name">Prof. Lakshmi G</div>
+                                <div class="member-role">Phone: 8921897549</div>
+                            </div>
+                            <div class="committee-member">
+                                <div class="member-name">Prof. Gagan Bangera B T</div>
+                                <div class="member-role">Phone: 8073568220</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dates & Fees Page -->
+        <section id="dates" class="page">
+            <div class="dates-fees">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Important Dates & Registration Fees</h2>
+                    </div>
+                    
+                    <div class="dates-fees-container">
+                        <div class="dates-card">
+                            <h3>Key Dates</h3>
+                            <div class="date-item">
+                                <div class="date-label">Receipt of Abstract</div>
+                                <div class="date-value">01-MAR-2026</div>
+                            </div>
+                            <div class="date-item">
+                                <div class="date-label">Acceptance Notification</div>
+                                <div class="date-value">05-MAR-2026</div>
+                            </div>
+                            <div class="date-item">
+                                <div class="date-label">Receipt of Full Papers</div>
+                                <div class="date-value">10-MAR-2026</div>
+                            </div>
+                            <div class="date-item">
+                                <div class="date-label">Conference Dates</div>
+                                <div class="date-value">19-20 MARCH 2026</div>
+                            </div>
+                        </div>
+                        
+                        <div class="fees-card">
+                            <h3>Registration Fee (Per Paper)</h3>
+                            <div class="fee-item">
+                                <div class="fee-category">Industry Participants</div>
+                                <div class="fee-amount">Rs. 1,000/-</div>
+                            </div>
+                            <div class="fee-item">
+                                <div class="fee-category">Academic Staff</div>
+                                <div class="fee-amount">Rs. 750/-</div>
+                            </div>
+                            <div class="fee-item">
+                                <div class="fee-category">Research Scholar</div>
+                                <div class="fee-amount">Rs. 500/-</div>
+                            </div>
+                            <div class="fee-item">
+                                <div class="fee-category">Student</div>
+                                <div class="fee-amount">Rs. 500/-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About College Page -->
+        <section id="college" class="page">
+            <div class="about-college">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>About the College</h2>
+                    </div>
+                    
+                    <div class="college-info">
+                        <div class="college-text">
+                            <h3>Moodlakatte Institute of Technology</h3>
+                            <p>Moodlakatte Institute of Technology was established in the year 2004. The college is situated near Kundapura, Udupi, Karnataka-576217 which is run by the Moodlakatte Nagarathna Bhujanga Shetty Trust (MNBS Trust).</p>
+                            <p>The college is approved by the All-India Council of Technical Education (AICTE), New Delhi and is affiliated to Visvesvaraya Technological University Belagavi. The College is located at a walkable distance from Kundapura railway station.</p>
+                            <p>Our institution is accredited by NAAC. The institution offers 6 UG programmes, namely CSE, ISE, ECE, CSE-DS, AI & ML, and CSE-AI & ML, and 2 PG programmes (MBA and MCA).</p>
+                        </div>
+                        <div class="college-image">
+                            <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="College Campus">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="departments">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Departments</h2>
+                    </div>
+                    
+                    <div class="dept-cards">
+                        <div class="dept-card">
+                            <div class="dept-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <h3>Information Science and Engineering</h3>
+                            <p>The Department of Information Science and Engineering (ISE) at Moodlakatte Institute of Technology was established in 2023 with an intake of 60 students. The department offers a Bachelor of Engineering (B.E.) programme affiliated to VTU, Belagavi.</p>
+                        </div>
+                        
+                        <div class="dept-card">
+                            <div class="dept-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>Computer Science Engineering Data Science</h3>
+                            <p>The Department of Computer Science and Engineering (Data Science) was established in 2022 and offers a Bachelor of Engineering (B.E.) in Computer Science and Engineering (Data Science) with an intake of 60 students.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Page -->
+        <section id="registration" class="page">
+            <div class="registration">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Registration Form</h2>
+                    </div>
+                    
+                    <div class="registration-form-container">
+                        <form id="conferenceRegistrationForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Name (Prof./Dr./Mr./Mrs./Ms.)</label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="organization">Organization</label>
+                                    <input type="text" id="organization" name="organization" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea id="address" name="address" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="tel" id="phone" name="phone" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="upi">UPI Reference No.</label>
+                                    <input type="text" id="upi" name="upi">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="date">Date</label>
+                                    <input type="date" id="date" name="date" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bank">Bank Name</label>
+                                <input type="text" id="bank" name="bank">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="paperTitle">Title of the Paper</label>
+                                <input type="text" id="paperTitle" name="paperTitle" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="authors">Author(s)</label>
+                                <textarea id="authors" name="authors" rows="3" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="category">Registration Category</label>
+                                <select id="category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="industry">Industry Participants - Rs. 1,000/-</option>
+                                    <option value="academic">Academic Staff - Rs. 750/-</option>
+                                    <option value="research">Research Scholar - Rs. 500/-</option>
+                                    <option value="student">Student - Rs. 500/-</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="cta-button" style="width: 100%;">Submit Registration</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="contact">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Contact Information</h2>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h3>Email</h3>
+                            <p>ncaidse2026@gmail.com</p>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3>Website</h3>
+                            <p>https://www.mitkundapura.com</p>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <h3>Address</h3>
+                            <p>Department of CSE(DS) and ISE<br>
+                            Moodlakatte Institute of Technology,<br>
+                            Kundapura, Udupi, Karnataka - 576217</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Map -->
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.300547494563!2d74.6865635759022!3d13.062864187274576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba3526d8479d8bb%3A0x849248b13a7dd67b!2sMoodlakatte%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1690987654321!5m2!1sen!2sin" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tourist Attractions Page -->
+        <section id="tourist" class="page">
+            <div class="tourist-hero">
+                <div class="container">
+                    <h1>Nearby Tourist Attractions</h1>
+                    <p>Explore the beautiful destinations around Kundapura, Udupi during your visit for NCAIDSE 2026 conference</p>
+                </div>
+            </div>
+            
+            <!-- Tourist Categories -->
+            <div class="tourist-categories">
+                <div class="container">
+                    <div class="categories-container">
+                        <button class="category-btn active" data-category="all">All Places</button>
+                        <button class="category-btn" data-category="beach">Beaches</button>
+                        <button class="category-btn" data-category="temple">Temples</button>
+                        <button class="category-btn" data-category="nature">Nature & Waterfalls</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tourist Grid -->
+            <div class="tourist-grid">
+                <div class="container">
+                    <div id="touristContainer">
+                        <!-- Tourist cards will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Section -->
+            <div class="map-section">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Tourist Locations Map</h2>
+                        <p>All tourist attractions around MIT Kundapura</p>
+                    </div>
+                    
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/d/embed?mid=1LQkRRjUPBvFpX-puhpDOv9wLX6Y&hl=en&ehbc=2E312F" width="100%" height="500"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Tourist Details -->
+    <div class="modal-overlay" id="touristModal">
+        <div class="modal">
+            <button class="close-modal" id="closeTouristModal">&times;</button>
+            <div id="modalContent">
+                <!-- Modal content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>NCAIDSE 2026</h3>
+                    <p>First National Conference on Advances in Information and Data Science Engineering<br>19-20 March 2026</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" data-page="home">Home</a></li>
+                        <li><a href="#" data-page="committee">Committee</a></li>
+                        <li><a href="#" data-page="dates">Dates & Fees</a></li>
+                        <li><a href="#" data-page="college">About College</a></li>
+                        <li><a href="#" data-page="registration">Registration</a></li>
+                        <li><a href="#" data-page="tourist">Tourist Places</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> ncaidse2026@gmail.com</li>
+                        <li><i class="fas fa-phone"></i> Prof. Lakshmi G: 8921897549</li>
+                        <li><i class="fas fa-phone"></i> Prof. Gagan Bangera: 8073568220</li>
+                        <li><i class="fas fa-map-marker-alt"></i> MIT Kundapura, Karnataka</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Organized By</h3>
+                    <p>Department of Information Science and Engineering &<br>
+                    Department of CSE (Data Science)<br>
+                    Moodlakatte Institute of Technology, Kundapura</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 NCAIDSE - National Conference on Advances in Information and Data Science Engineering. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tourist Data from PDF
+        const touristData = [
+            {
+                id: 1,
+                name: "St. Mary's Islands",
+                category: "beach",
+                distance: "45 KM from MITK",
+                description: "St. Mary's Islands, also known as Coconut Islands, are a group of small islands located in the Arabian Sea, off the coast of Malpe beach, near Udupi district, Karnataka.",
+                image: "https://images.unsplash.com/photo-1580137189272-c9379f8864fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Clear blue waters and white sandy beaches",
+                    "Coconut trees and rich marine life",
+                    "Best time to visit: October to February",
+                    "Activities include sightseeing and photography",
+                    "Swimming is restricted due to strong currents",
+                    "Plastics and littering are strictly prohibited",
+                    "Boat services to St. Mary's Islands usually operate between 10:00 AM – 4:00 PM (weather dependent)"
+                ],
+                timing: {
+                    open: "9:00 AM",
+                    close: "5:00 PM"
+                },
+                bestTime: "October to February"
+            },
+            {
+                id: 2,
+                name: "Malpe Beach",
+                category: "beach",
+                distance: "43 KM from MITK",
+                description: "Malpe Beach is a popular coastal destination located in the Udupi district of Karnataka, along the Arabian Sea, about 6 km west of Udupi town. It is known for its clean sandy shore, cool sea breeze, and scenic natural beauty.",
+                image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "One of the cleanest and safest beaches in Karnataka",
+                    "Famous as the gateway to St. Mary's Islands",
+                    "Known for golden sandy shore and calm scenic views",
+                    "Important fishing harbour of Udupi",
+                    "Popular spot for sunset views",
+                    "Speed boating and ferry services",
+                    "Nearby attractions include Sea Walk Bridge and Malpe Port"
+                ],
+                timing: {
+                    open: "9:00 AM",
+                    close: "5:00 PM"
+                }
+            },
+            {
+                id: 3,
+                name: "Udupi Sri Krishna Matha Temple",
+                category: "temple",
+                distance: "43 KM from MITK",
+                description: "Udupi Sri Krishna Matha Temple is a famous Hindu temple located in Udupi town, Udupi district, Karnataka. It is one of the most important pilgrimage centers in South India and is dedicated to Lord Krishna.",
+                image: "https://images.unsplash.com/photo-1585506936724-fa0c19d0f8c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Established in the 13th century",
+                    "Founded by Sri Madhvacharya, founder of Dvaita philosophy",
+                    "Darshan is through the Kanakana Kindi (silver-plated window)",
+                    "Major festivals: Krishna Jammashtami and Paryaya Festival",
+                    "Surrounded by Ashta Mathas (eight monasteries)",
+                    "The historic Mitra Samaja hotel, established in 1935, is famous for traditional Udupi vegetarian meals",
+                    "Famous for prasadam and Udupi vegetarian cuisine"
+                ],
+                timing: {
+                    open: "Early Morning",
+                    close: "Night (darshan timings vary)"
+                }
+            },
+            {
+                id: 4,
+                name: "Murudeshwara Temple",
+                category: "temple",
+                distance: "141 KM from MITK",
+                description: "Murudeshwara Temple is a famous Shiva temple located on the Arabian Sea coast in Uttara Kannada, Karnataka. It is renowned for the 123-foot tall statue of Lord Shiva and its scenic seaside setting.",
+                image: "https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located in Murudeshwara town, Uttara Kannada district, Karnataka",
+                    "Famous for the world's second-tallest statue of Lord Shiva (123 feet)",
+                    "Temple is built on Kanduka Hill, surrounded by the sea on three sides",
+                    "Maha Shivaratri celebrated grandly",
+                    "Murudeshwara Beach – clean and scenic, right next to the temple",
+                    "From the top of the gopura, visitors get a panoramic view of the sea and temple"
+                ],
+                timing: {
+                    open: "3:00 AM – 1:00 PM & 3:00 PM – 8:00 PM",
+                    special: "Raja Gopura (Tower) Timing: 8:00 AM – 6:00 PM"
+                }
+            },
+            {
+                id: 5,
+                name: "Kollur Mookambika Temple",
+                category: "temple",
+                distance: "84 KM from MITK",
+                description: "Kollur Mookambika Temple is a famous Shakti temple in Karnataka dedicated to Goddess Mookambika, symbolizing knowledge and strength. It is surrounded by the Western Ghats, near the Souparnika River.",
+                image: "https://images.unsplash.com/photo-1585506936724-fa0c19d0f8c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Situated at the foothills of the Western Ghats",
+                    "One of the most important Shakti Peethas in South India",
+                    "Associated with Adi Shankaracharya",
+                    "Goddess worshipped as a symbol of knowledge, power, and prosperity",
+                    "Navaratri celebrated in a grand manner",
+                    "Vijayadashami is very important",
+                    "Souparnika River – holy river flowing near the temple",
+                    "Kodachadri Hills – famous trekking and pilgrimage spot"
+                ],
+                timing: {
+                    open: "5:00 AM – 1:30 PM & 3:00 PM – 9:00 PM"
+                }
+            },
+            {
+                id: 6,
+                name: "Shringeri Temple",
+                category: "temple",
+                distance: "157 KM from MITK",
+                description: "Sringeri Sharada Peetham (Shringeri Temple) is a famous Hindu temple located in Chikkamagaluru district, Karnataka, dedicated to Goddess Sharada (Saraswati). It was established in the 8th century by Adi Shankaracharya.",
+                image: "https://images.unsplash.com/photo-1585506936724-fa0c19d0f8c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Situated on the banks of the Tunga River",
+                    "One of the four main Advaita Peethams established by Adi Shankaracharya",
+                    "Beautiful temple architecture with detailed carvings",
+                    "Important place for education, Vedic learning, and Sanskrit studies",
+                    "Sharada Navaratri celebrated grandly",
+                    "Tunga River Ghats – holy bathing place near the temple",
+                    "Vidyashankara Temple – famous ancient Shiva temple nearby",
+                    "Surrounded by Western Ghats greenery, ideal for nature lovers"
+                ],
+                timing: {
+                    open: "6:00 AM – 2:00 PM & 4:00 PM – 9:00 PM"
+                }
+            },
+            {
+                id: 7,
+                name: "Gokarna",
+                category: "beach",
+                distance: "128 KM from MITK",
+                description: "Mahabaleshwar Temple, Gokarna is an ancient and sacred Shiva temple in Karnataka, famous for the Atma Linga worshipped by devotees. It is a major pilgrimage site and beach destination.",
+                image: "https://images.unsplash.com/photo-1593693399740-5c6c2d171713?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Famous as a holy pilgrimage town and a beach destination",
+                    "Situated along the Arabian Sea",
+                    "Om Beach, Kudle Beach, Half Moon Beach, Paradise Beach, and Gokarna Main Beach",
+                    "Less commercialized and calmer than Goa",
+                    "Ideal place for yoga, meditation, and relaxation",
+                    "Mahabaleshwar Temple – famous ancient Shiva temple",
+                    "Mirjan Fort – historical fort nearby"
+                ],
+                timing: {
+                    open: "6:00 AM",
+                    close: "6:00 PM (best visited during daylight)"
+                }
+            },
+            {
+                id: 8,
+                name: "Goa",
+                category: "beach",
+                distance: "253 KM from MITK",
+                description: "Goa is rich in natural beauty, with long sandy beaches, clear blue seas, green forests, rivers, and scenic hills of the Western Ghats. Its pleasant climate, waterfalls, and wildlife make Goa a perfect place for nature lovers.",
+                image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located on the western coast of India, along the Arabian Sea",
+                    "Famous for its beautiful beaches, nightlife, and water sports",
+                    "Famous beaches like Baga, Calangute, Anjuna, Vagator, and Palolem",
+                    "Popular for water sports such as parasailing, jet skiing, and scuba diving",
+                    "Historic churches and forts (many are UNESCO heritage sites)",
+                    "Fort Aguada – popular sea-facing fort",
+                    "Dudhsagar Waterfalls – one of India's tallest waterfalls"
+                ],
+                timing: {
+                    open: "6:00 AM",
+                    close: "6:00 PM (best time to visit)",
+                    special: "Churches & Forts: Usually 9:00 AM – 6:00 PM (varies by place)"
+                }
+            },
+            {
+                id: 9,
+                name: "Kodi Beach",
+                category: "beach",
+                distance: "9 KM from MITK",
+                description: "Kodi Beach is a serene and unspoiled coastal spot known for its long golden sands, gentle waves, and lush greenery that reflect nature at its purest. Surrounded by coconut groves and calm backwaters.",
+                image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located on the western coast of Karnataka, near Kundapura & Udupi",
+                    "Famous for river-sea confluence, golden sands, and scenic sunsets",
+                    "Popular for walking, photography, and experiencing local fishing culture",
+                    "Famous sea walkway (~1 km) built on a breakwater",
+                    "Nearby fishing villages and backwaters show authentic coastal life",
+                    "Maravanthe Beach – river meets sea, picturesque ~25 km away",
+                    "Hoode Beach – scenic & quiet, ~18 km away",
+                    "Kundapura town – local seafood & coastal cuisine"
+                ],
+                timing: {
+                    open: "9:00 AM",
+                    close: "8:30 PM",
+                    special: "Kodi Lighthouse (viewpoint): 4:00 PM – 5:30 PM"
+                }
+            },
+            {
+                id: 10,
+                name: "Maravanthe Beach",
+                category: "beach",
+                distance: "39 KM from MITK",
+                description: "Maravanthe Beach is a rare and breathtaking natural wonder where the Arabian Sea roars on one side and a calm river flows on the other, separated by a slender coastal road.",
+                image: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located in Udupi district, Karnataka, on the western coast of India",
+                    "Famous for its unique geography and scenic beauty",
+                    "Arabian Sea on one side and Sauparnika River on the other",
+                    "NH-66 runs between the sea and the river",
+                    "Long stretch of golden sand and strong sea waves",
+                    "Lush green palm trees and peaceful surroundings",
+                    "One of the most photographed beaches in Karnataka",
+                    "Sauparnika River",
+                    "Maravanthe Beach viewpoint"
+                ],
+                timing: {
+                    open: "24 hours",
+                    note: "Public beach, best visited 6:00 AM – 6:00 PM"
+                }
+            },
+            {
+                id: 11,
+                name: "Honnavar Backwater Boating",
+                category: "nature",
+                distance: "144 KM from MITK",
+                description: "Honnavar backwater boating offers a serene journey through calm river waters lined with lush coconut palms and rich greenery. The misty atmosphere, gentle breeze, and natural silence create a peaceful experience.",
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located in Honnavar, Uttara Kannada district, Karnataka",
+                    "Famous for scenic backwaters formed by the Sharavathi River",
+                    "Known for peaceful boating through coconut palms and mangroves",
+                    "Misty mornings and golden sunset views",
+                    "Traditional motor boats and small cruise boats available",
+                    "Sharavathi River estuary",
+                    "Eco Beach, Honnavar",
+                    "Motor boats are used for backwater rides",
+                    "Charges range from ₹1,000 to ₹2,000 per boat depending on ride duration (1–2 hours)"
+                ],
+                timing: {
+                    open: "9:00 AM",
+                    close: "6:00 PM",
+                    bestTime: "Early morning or evening"
+                }
+            },
+            {
+                id: 12,
+                name: "Yana Caves",
+                category: "nature",
+                distance: "161 KM from MITK",
+                description: "Yana Caves are a striking natural wonder formed by massive black limestone rock formations rising dramatically from dense green forests. Surrounded by untouched nature, waterfalls, and rich biodiversity.",
+                image: "https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located in Uttara Kannada district, Karnataka",
+                    "Situated in the Western Ghats, surrounded by dense forests",
+                    "Famous for its unique black limestone rock formations",
+                    "One of the largest limestone formations in India",
+                    "Popular trekking and nature destination",
+                    "Two main rock formations: Bhairaveshwara Shikhara and Mohini Shikhara",
+                    "Yana Caves are a rare combination of geological wonder, spiritual importance, and untouched natural beauty",
+                    "Vibhuti Falls (nearby waterfall), Sirsi town",
+                    "Jog Falls (within driving distance)"
+                ],
+                timing: {
+                    open: "8:00 AM",
+                    close: "5:00 PM"
+                }
+            },
+            {
+                id: 13,
+                name: "Apsarakonda Waterfalls",
+                category: "nature",
+                distance: "141 KM from MITK",
+                description: "Apsarakonda Waterfalls is a serene natural spot where water gently cascades through lush green forests into a clear pool below. Surrounded by hills, caves, and dense vegetation.",
+                image: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located near Honnavar, Uttara Kannada district, Karnataka",
+                    "Nestled in the Western Ghats, close to the Arabian Sea",
+                    "Ideal spot for short trips, photography, and relaxation",
+                    "Freshwater waterfall flowing gently through rocky terrain",
+                    "Surrounded by lush greenery and small hills",
+                    "Natural pond at the base of the falls",
+                    "Less crowded and peaceful compared to major waterfalls",
+                    "Apsarakonda Cave, Apsarakonda Beach",
+                    "Eco Beach, Honnavar, Kasarkod Blue Flag Beach, Sharavathi River estuary"
+                ],
+                timing: {
+                    open: "8:00 AM",
+                    close: "5:00 PM",
+                    bestTime: "Morning or post-monsoon season"
+                }
+            },
+            {
+                id: 14,
+                name: "Apsarakonda Beach",
+                category: "beach",
+                distance: "141 KM from MITK",
+                description: "Apsarakonda Beach is a quiet and scenic coastal stretch where soft waves meet golden sand amid lush greenery. Surrounded by hills and palm trees, it offers a peaceful connection with nature away from crowds.",
+                image: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located near Honnavar, Uttara Kannada district, Karnataka",
+                    "Known for its quiet, clean, and less-crowded shoreline",
+                    "Ideal place for nature lovers and peaceful relaxation",
+                    "Golden sandy beach with gentle sea waves",
+                    "Surrounded by green hills, rocks, and palm trees",
+                    "Scenic views especially during sunset",
+                    "Calm atmosphere compared to popular tourist beaches",
+                    "Apsarakonda Cave, Apsarakonda Beach",
+                    "Eco Beach, Honnavar, Kasarkod Blue Flag Beach, Sharavathi River estuary"
+                ],
+                timing: {
+                    open: "6:00 AM",
+                    close: "6:00 PM"
+                }
+            },
+            {
+                id: 15,
+                name: "Jog Falls",
+                category: "nature",
+                distance: "157 KM from MITK",
+                description: "Jog Falls is a majestic natural spectacle where the Sharavathi River cascades powerfully down steep cliffs amid dense greenery. The thundering water, mist-filled air, and vast landscape highlight the grandeur of nature.",
+                image: "https://images.unsplash.com/photo-1564507004663-b6dfb3e2ede5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                details: [
+                    "Located in Shivamogga district, Karnataka",
+                    "Formed by the Sharavathi River",
+                    "One of the highest waterfalls in India (approx. 830 feet)",
+                    "Major tourist attraction in the Western Ghats",
+                    "Comprises four cascades: Raja, Rani, Roarer, and Rocket",
+                    "Spectacular view during monsoon season when water flow is at its peak",
+                    "Offers breathtaking viewpoints and nature photography spots",
+                    "Sharavathi Valley Viewpoint, Linganamakki Dam",
+                    "Tyavarekoppa Lion Safari (within driving distance)",
+                    "Entry to the base is restricted during heavy monsoon for safety"
+                ],
+                timing: {
+                    open: "8:00 AM",
+                    close: "5:00 PM"
+                }
+            }
+        ];
+
+        // Conference Topics
+        const conferenceTopics = [
+            "AIML",
+            "Networking",
+            "Data Mining and Warehousing",
+            "Cloud Computing",
+            "Data Science",
+            "Cyber security",
+            "Green Computing",
+            "Quantum Computing",
+            "Software Engineering",
+            "Engineering Applications",
+            "High Performance Computing",
+            "Open Source Software",
+            "Grid Computing",
+            "Enterprise Computing",
+            "Nano Computing",
+            "Any other topics related to CSE domain"
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const navLinks = document.querySelectorAll('.nav-link, .footer-links a[data-page]');
+            const pages = document.querySelectorAll('.page');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+            const registerHomeBtn = document.getElementById('registerHomeBtn');
+            const topicsGrid = document.getElementById('topicsGrid');
+            const touristContainer = document.getElementById('touristContainer');
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const touristModal = document.getElementById('touristModal');
+            const closeTouristModal = document.getElementById('closeTouristModal');
+            const modalContent = document.getElementById('modalContent');
+            const logoHome = document.getElementById('logoHome');
+            const notification = document.getElementById('notification');
+            const registrationForm = document.getElementById('conferenceRegistrationForm');
+            const countdownDays = document.getElementById('days');
+            const countdownHours = document.getElementById('hours');
+            const countdownMinutes = document.getElementById('minutes');
+            const countdownSeconds = document.getElementById('seconds');
+
+            // Initialize topics
+            renderTopics();
+            
+            // Initialize tourist cards
+            renderTouristCards(touristData);
+            
+            // Initialize countdown timer
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // Function to switch between pages
+            function switchPage(pageId) {
+                // Hide all pages
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Show selected page
+                const activePage = document.getElementById(pageId);
+                if (activePage) {
+                    activePage.classList.add('active');
+                }
+                
+                // Update active nav link
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-page') === pageId) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Close mobile menu if open
+                navMenu.classList.remove('show');
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // Add click events to navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    if (pageId) {
+                        switchPage(pageId);
+                    }
+                });
+            });
+            
+            // Logo click to go home
+            logoHome.addEventListener('click', function() {
+                switchPage('home');
+            });
+            
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                navMenu.classList.toggle('show');
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    navMenu.classList.remove('show');
+                }
+            });
+            
+            // Register button on home page
+            registerHomeBtn.addEventListener('click', function() {
+                switchPage('registration');
+            });
+            
+            // Render topics
+            function renderTopics() {
+                topicsGrid.innerHTML = '';
+                conferenceTopics.forEach(topic => {
+                    const topicItem = document.createElement('div');
+                    topicItem.className = 'topic-item';
+                    topicItem.textContent = topic;
+                    topicsGrid.appendChild(topicItem);
+                });
+            }
+            
+            // Category filtering for tourist places
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    // Update active button
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter tourist cards
+                    filterTouristCards(category);
+                });
+            });
+            
+            // Render tourist cards
+            function renderTouristCards(data) {
+                touristContainer.innerHTML = '';
+                
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = `tourist-card show`;
+                    card.setAttribute('data-category', item.category);
+                    card.setAttribute('data-id', item.id);
+                    
+                    // Get category label
+                    let categoryLabel = item.category;
+                    if (categoryLabel === 'beach') categoryLabel = 'Beach';
+                    else if (categoryLabel === 'temple') categoryLabel = 'Temple';
+                    else if (categoryLabel === 'nature') categoryLabel = 'Nature';
+                    else categoryLabel = 'Other';
+                    
+                    card.innerHTML = `
+                        <div class="tourist-image">
+                            <img src="${item.image}" alt="${item.name}">
+                            <div class="tourist-category">${categoryLabel}</div>
+                        </div>
+                        <div class="tourist-info">
+                            <h3 class="tourist-name">${item.name}</h3>
+                            <div class="tourist-distance">${item.distance}</div>
+                            <p class="tourist-description">${item.description}</p>
+                            
+                            <div class="tourist-details">
+                                <div class="details-title">Highlights</div>
+                                <ul class="details-list">
+                                    ${item.details.slice(0, 3).map(detail => `<li>${detail}</li>`).join('')}
+                                    ${item.details.length > 3 ? '<li>And more...</li>' : ''}
+                                </ul>
+                                
+                                <div class="timing-info">
+                                    <div class="timing-item">
+                                        <span class="timing-label">Opening Hours:</span>
+                                        <span>${item.timing.open} - ${item.timing.close}</span>
+                                    </div>
+                                    ${item.bestTime ? `
+                                    <div class="timing-item">
+                                        <span class="timing-label">Best Time:</span>
+                                        <span>${item.bestTime}</span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="tourist-actions">
+                                <button class="action-btn view-details-btn" data-id="${item.id}">View Details</button>
+                                <button class="action-btn get-directions-btn" data-id="${item.id}">Get Directions</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    touristContainer.appendChild(card);
+                });
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.view-details-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        showTouristDetails(id);
+                    });
+                });
+                
+                document.querySelectorAll('.get-directions-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        getDirections(id);
+                    });
+                });
+            }
+            
+            // Filter tourist cards by category
+            function filterTouristCards(category) {
+                const cards = document.querySelectorAll('.tourist-card');
+                
+                cards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.classList.add('show');
+                    } else {
+                        card.classList.remove('show');
+                    }
+                });
+            }
+            
+            // Show tourist details in modal
+            function showTouristDetails(id) {
+                const item = touristData.find(t => t.id === id);
+                if (!item) return;
+                
+                // Get category label
+                let categoryLabel = item.category;
+                if (categoryLabel === 'beach') categoryLabel = 'Beach';
+                else if (categoryLabel === 'temple') categoryLabel = 'Temple';
+                else if (categoryLabel === 'nature') categoryLabel = 'Nature & Waterfall';
+                else categoryLabel = 'Other Attraction';
+                
+                modalContent.innerHTML = `
+                    <h2 class="modal-title">${item.name}</h2>
+                    <img src="${item.image}" alt="${item.name}" class="modal-image">
+                    <div class="tourist-distance">${item.distance}</div>
+                    <div style="background-color: ${getCategoryColor(item.category)}; color: white; display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; margin-bottom: 20px;">${categoryLabel}</div>
+                    
+                    <p style="font-size: 1.1rem; margin-bottom: 20px;">${item.description}</p>
+                    
+                    <div class="details-title" style="font-size: 1.3rem;">Highlights & Information</div>
+                    <ul class="details-list">
+                        ${item.details.map(detail => `<li>${detail}</li>`).join('')}
+                    </ul>
+                    
+                    <div class="timing-info" style="margin-top: 30px;">
+                        <div class="timing-item">
+                            <span class="timing-label">Distance from MITK:</span>
+                            <span>${item.distance}</span>
+                        </div>
+                        <div class="timing-item">
+                            <span class="timing-label">Opening Hours:</span>
+                            <span>${item.timing.open} - ${item.timing.close}</span>
+                        </div>
+                        ${item.timing.special ? `
+                        <div class="timing-item">
+                            <span class="timing-label">Special Timing:</span>
+                            <span>${item.timing.special}</span>
+                        </div>
+                        ` : ''}
+                        ${item.timing.note ? `
+                        <div class="timing-item">
+                            <span class="timing-label">Note:</span>
+                            <span>${item.timing.note}</span>
+                        </div>
+                        ` : ''}
+                        ${item.bestTime ? `
+                        <div class="timing-item">
+                            <span class="timing-label">Best Time to Visit:</span>
+                            <span>${item.bestTime}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                touristModal.classList.add('active');
+            }
+            
+            // Get category color
+            function getCategoryColor(category) {
+                switch(category) {
+                    case 'beach': return '#1a5fb4';
+                    case 'temple': return '#e63946';
+                    case 'nature': return '#2a9d8f';
+                    default: return '#6c757d';
+                }
+            }
+            
+            // Get directions
+            function getDirections(id) {
+                const item = touristData.find(t => t.id === id);
+                if (!item) return;
+                
+                // Create Google Maps URL for directions from MITK
+                const baseUrl = 'https://www.google.com/maps/dir/';
+                const mitkCoords = '13.062864,74.686563'; // MITK coordinates
+                let destination = '';
+                
+                // Map place names to coordinates (approximate)
+                const placeCoords = {
+                    1: '13.3490,74.6789', // St. Mary's Islands
+                    2: '13.3500,74.6900', // Malpe Beach
+                    3: '13.3389,74.7451', // Udupi Temple
+                    4: '14.0945,74.4865', // Murudeshwara
+                    5: '13.9709,74.8064', // Kollur
+                    6: '13.4190,75.2497', // Shringeri
+                    7: '14.5500,74.3167', // Gokarna
+                    8: '15.2993,74.1240', // Goa
+                    9: '13.6333,74.7000', // Kodi Beach
+                    10: '13.7833,74.6500', // Maravanthe
+                    11: '14.2800,74.4500', // Honnavar
+                    12: '14.8367,74.5892', // Yana Caves
+                    13: '14.2500,74.4333', // Apsarakonda Waterfalls
+                    14: '14.2500,74.4333', // Apsarakonda Beach
+                    15: '14.2299,74.8122' // Jog Falls
+                };
+                
+                destination = placeCoords[id] || '13.062864,74.686563';
+                
+                // Open Google Maps in new tab
+                window.open(`${baseUrl}Moodlakatte+Institute+of+Technology+Kundapura/${destination}`, '_blank');
+            }
+            
+            // Close modal
+            closeTouristModal.addEventListener('click', function() {
+                touristModal.classList.remove('active');
+            });
+            
+            touristModal.addEventListener('click', function(e) {
+                if (e.target === touristModal) {
+                    touristModal.classList.remove('active');
+                }
+            });
+            
+            // Form submission
+            if (registrationForm) {
+                registrationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get form data
+                    const formData = new FormData(this);
+                    const data = Object.fromEntries(formData);
+                    
+                    // Show notification
+                    showNotification('Registration submitted successfully! We will contact you soon.');
+                    
+                    // Reset form
+                    this.reset();
+                    
+                    // Set today's date
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('date').value = today;
+                });
+            }
+            
+            // Set today's date in the form
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                dateInput.value = today;
+            }
+            
+            // Show notification
+            function showNotification(message) {
+                notification.textContent = message;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Countdown timer
+            function updateCountdown() {
+                const conferenceDate = new Date('March 19, 2026 09:00:00').getTime();
+                const now = new Date().getTime();
+                const timeLeft = conferenceDate - now;
+                
+                if (timeLeft > 0) {
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    
+                    countdownDays.textContent = days.toString().padStart(2, '0');
+                    countdownHours.textContent = hours.toString().padStart(2, '0');
+                    countdownMinutes.textContent = minutes.toString().padStart(2, '0');
+                    countdownSeconds.textContent = seconds.toString().padStart(2, '0');
+                } else {
+                    countdownDays.textContent = '00';
+                    countdownHours.textContent = '00';
+                    countdownMinutes.textContent = '00';
+                    countdownSeconds.textContent = '00';
+                }
+            }
+            
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.style.padding = '0';
+                    header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+                } else {
+                    header.style.padding = '';
+                    header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+                }
+            });
+            
+            // Add animation to elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            const animatedElements = document.querySelectorAll('.info-card, .topic-item, .tourist-card, .dept-card, .committee-member');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+     <script>
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCyPFhXiHD8rdaISngtfppUfObc11XUyFY",
+  authDomain: "mit-ise.firebaseapp.com",
+  projectId: "mit-ise",
+  storageBucket: "mit-ise.firebasestorage.app",
+  messagingSenderId: "1003313648930",
+  appId: "1:1003313648930:web:840975ff875ff2268a817b",
+  measurementId: "G-3H4MZ7MM9Z"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+    </script>
+</body>
+
+</html>
